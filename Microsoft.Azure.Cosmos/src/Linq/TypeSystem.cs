@@ -11,6 +11,7 @@ namespace Microsoft.Azure.Cosmos.Linq
     using System.Reflection;
     using System.Runtime.CompilerServices;
     using System.Runtime.Serialization;
+    using System.Text.Json.Serialization;
     using Microsoft.Azure.Documents;
     using Newtonsoft.Json;
 
@@ -24,22 +25,30 @@ namespace Microsoft.Azure.Cosmos.Linq
         public static string GetMemberName(this MemberInfo memberInfo, CosmosSerializationOptions cosmosSerializationOptions = null)
         {
             string memberName = null;
-            // Json.Net honors JsonPropertyAttribute more than DataMemberAttribute
-            // So we check for JsonPropertyAttribute first.
-            JsonPropertyAttribute jsonPropertyAttribute = memberInfo.GetCustomAttribute<JsonPropertyAttribute>(true);
-            if (jsonPropertyAttribute != null && !string.IsNullOrEmpty(jsonPropertyAttribute.PropertyName))
+            JsonPropertyNameAttribute jsonPropertyNameAttribute = memberInfo.GetCustomAttribute<JsonPropertyNameAttribute>(true);
+            if (jsonPropertyNameAttribute != null && !string.IsNullOrEmpty(jsonPropertyNameAttribute.Name))
             {
-                memberName = jsonPropertyAttribute.PropertyName;
+                return jsonPropertyNameAttribute.Name;
             }
             else
             {
-                DataContractAttribute dataContractAttribute = memberInfo.DeclaringType.GetCustomAttribute<DataContractAttribute>(true);
-                if (dataContractAttribute != null)
+                // Json.Net honors JsonPropertyAttribute more than DataMemberAttribute
+                // So we check for JsonPropertyAttribute first.
+                JsonPropertyAttribute jsonPropertyAttribute = memberInfo.GetCustomAttribute<JsonPropertyAttribute>(true);
+                if (jsonPropertyAttribute != null && !string.IsNullOrEmpty(jsonPropertyAttribute.PropertyName))
                 {
-                    DataMemberAttribute dataMemberAttribute = memberInfo.GetCustomAttribute<DataMemberAttribute>(true);
-                    if (dataMemberAttribute != null && !string.IsNullOrEmpty(dataMemberAttribute.Name))
+                    return jsonPropertyAttribute.PropertyName;
+                }
+                else
+                {
+                    DataContractAttribute dataContractAttribute = memberInfo.DeclaringType.GetCustomAttribute<DataContractAttribute>(true);
+                    if (dataContractAttribute != null)
                     {
-                        memberName = dataMemberAttribute.Name;
+                        DataMemberAttribute dataMemberAttribute = memberInfo.GetCustomAttribute<DataMemberAttribute>(true);
+                        if (dataMemberAttribute != null && !string.IsNullOrEmpty(dataMemberAttribute.Name))
+                        {
+                            memberName = dataMemberAttribute.Name;
+                        }
                     }
                 }
             }

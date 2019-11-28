@@ -6050,7 +6050,11 @@ namespace Microsoft.Azure.Cosmos
                                                               : resourceAddress + "/";
                         foreach (KeyValuePair<string, List<PartitionKeyAndResourceTokenPair>> pair in this.resourceTokens)
                         {
-                            if (pair.Key.StartsWith(resourceAddressWithSlash, StringComparison.Ordinal))
+                            string resourceTokenWithSlash = pair.Key.EndsWith("/", StringComparison.Ordinal)
+                                                              ? pair.Key
+                                                              : pair.Key + "/";
+
+                            if (resourceTokenWithSlash.StartsWith(resourceAddressWithSlash, StringComparison.Ordinal))
                             {
                                 resourceToken = pair.Value[0].ResourceToken;
                                 isTokenAvailable = true;
