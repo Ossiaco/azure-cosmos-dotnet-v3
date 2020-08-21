@@ -15,7 +15,7 @@ namespace Microsoft.Azure.Cosmos
         internal DatabaseInlineCore(
            CosmosClientContext clientContext,
            string databaseId)
-            : base (
+            : base(
                clientContext,
                databaseId)
         {
@@ -31,6 +31,18 @@ namespace Microsoft.Azure.Cosmos
                 nameof(CreateContainerAsync),
                 requestOptions,
                 (diagnostics) => base.CreateContainerAsync(diagnostics, containerProperties, throughput, requestOptions, cancellationToken));
+        }
+
+        public override Task<ContainerResponse> CreateContainerAsync(
+            ContainerProperties containerProperties,
+            ThroughputProperties throughputProperties,
+            RequestOptions requestOptions = null,
+            CancellationToken cancellationToken = default)
+        {
+            return this.ClientContext.OperationHelperAsync(
+                nameof(CreateContainerAsync),
+                requestOptions,
+                (diagnostics) => base.CreateContainerAsync(diagnostics, containerProperties, throughputProperties, requestOptions, cancellationToken));
         }
 
         public override Task<ContainerResponse> CreateContainerAsync(string id,
@@ -58,6 +70,18 @@ namespace Microsoft.Azure.Cosmos
         }
 
         public override Task<ContainerResponse> CreateContainerIfNotExistsAsync(
+            ContainerProperties containerProperties,
+            ThroughputProperties throughputProperties,
+            RequestOptions requestOptions = null,
+            CancellationToken cancellationToken = default(CancellationToken))
+        {
+            return this.ClientContext.OperationHelperAsync(
+                nameof(CreateContainerIfNotExistsAsync),
+                requestOptions,
+                (diagnostics) => base.CreateContainerIfNotExistsAsync(diagnostics, containerProperties, throughputProperties, requestOptions, cancellationToken));
+        }
+
+        public override Task<ContainerResponse> CreateContainerIfNotExistsAsync(
             string id,
             string partitionKeyPath,
             int? throughput = null,
@@ -80,6 +104,18 @@ namespace Microsoft.Azure.Cosmos
                 nameof(CreateContainerStreamAsync),
                 requestOptions,
                 (diagnostics) => base.CreateContainerStreamAsync(diagnostics, containerProperties, throughput, requestOptions, cancellationToken));
+        }
+
+        public override Task<ResponseMessage> CreateContainerStreamAsync(
+            ContainerProperties containerProperties,
+            ThroughputProperties throughputProperties,
+            RequestOptions requestOptions = null,
+            CancellationToken cancellationToken = default)
+        {
+            return this.ClientContext.OperationHelperAsync(
+                nameof(CreateContainerStreamAsync),
+                requestOptions,
+                (diagnostics) => base.CreateContainerStreamAsync(diagnostics, containerProperties, throughputProperties, requestOptions, cancellationToken));
         }
 
         public override Task<UserResponse> CreateUserAsync(string id,
@@ -251,42 +287,6 @@ namespace Microsoft.Azure.Cosmos
                 nameof(ReplaceThroughputAsync),
                 requestOptions,
                 (diagnostics) => base.ReplaceThroughputAsync(diagnostics, throughputProperties, requestOptions, cancellationToken));
-        }
-
-        public override Task<ContainerResponse> CreateContainerAsync(
-            ContainerProperties containerProperties,
-            ThroughputProperties throughputProperties,
-            RequestOptions requestOptions = null,
-            CancellationToken cancellationToken = default)
-        {
-            return this.ClientContext.OperationHelperAsync(
-                nameof(CreateContainerAsync),
-                requestOptions,
-                (diagnostics) => base.CreateContainerAsync(diagnostics, containerProperties, throughputProperties, requestOptions, cancellationToken));
-        }
-
-        public override Task<ContainerResponse> CreateContainerIfNotExistsAsync(
-            ContainerProperties containerProperties,
-            ThroughputProperties throughputProperties,
-            RequestOptions requestOptions = null,
-            CancellationToken cancellationToken = default(CancellationToken))
-        {
-            return this.ClientContext.OperationHelperAsync(
-                nameof(CreateContainerIfNotExistsAsync),
-                requestOptions,
-                (diagnostics) => base.CreateContainerIfNotExistsAsync(diagnostics, containerProperties, throughputProperties, requestOptions, cancellationToken));
-        }
-
-        public override Task<ResponseMessage> CreateContainerStreamAsync(
-            ContainerProperties containerProperties,
-            ThroughputProperties throughputProperties,
-            RequestOptions requestOptions = null,
-            CancellationToken cancellationToken = default)
-        {
-            return this.ClientContext.OperationHelperAsync(
-                nameof(CreateContainerStreamAsync),
-                requestOptions,
-                (diagnostics) => base.CreateContainerStreamAsync(diagnostics, containerProperties, throughputProperties, requestOptions, cancellationToken));
         }
 
         public override Task<UserResponse> UpsertUserAsync(

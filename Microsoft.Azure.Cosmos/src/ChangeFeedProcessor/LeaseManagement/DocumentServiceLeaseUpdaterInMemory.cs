@@ -35,7 +35,7 @@ namespace Microsoft.Azure.Cosmos.ChangeFeed.LeaseManagement
                 lease = updateLease(lease);
                 if (lease == null)
                 {
-                    return null;
+                    return Task.FromResult<DocumentServiceLease>(null);
                 }
 
                 if (!this.container.TryGetValue(itemId, out DocumentServiceLease currentLease))
