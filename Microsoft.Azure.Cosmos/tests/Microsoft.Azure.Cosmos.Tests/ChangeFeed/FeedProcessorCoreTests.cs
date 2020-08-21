@@ -98,6 +98,50 @@ namespace Microsoft.Azure.Cosmos.ChangeFeed.Tests
             await Assert.ThrowsExceptionAsync<FeedSplitException>(() => processor.RunAsync(cancellationTokenSource.Token));
         }
 
+        [DataRow(HttpStatusCode.NotFound, (int)Documents.SubStatusCodes.Unknown)]
+        [DataTestMethod]
+        public async Task ThrowOnPartitionGone(HttpStatusCode statusCode, int subStatusCode)
+        {
+            CancellationTokenSource cancellationTokenSource = new CancellationTokenSource(1000);
+
+            Mock<ChangeFeedObserver> mockObserver = new Mock<ChangeFeedObserver>();
+
+            Mock<PartitionCheckpointer> mockCheckpointer = new Mock<PartitionCheckpointer>();
+            Mock<FeedIterator> mockIterator = new Mock<FeedIterator>();
+            mockIterator.Setup(i => i.ReadNextAsync(It.IsAny<CancellationToken>()))
+                .ReturnsAsync(GetResponse(statusCode, false, subStatusCode));
+
+            FeedProcessorCore processor = new FeedProcessorCore(
+                mockObserver.Object,
+                mockIterator.Object,
+                FeedProcessorCoreTests.DefaultSettings,
+                mockCheckpointer.Object);
+
+            await Assert.ThrowsExceptionAsync<FeedNotFoundException>(() => processor.RunAsync(cancellationTokenSource.Token));
+        }
+
+        [DataRow(HttpStatusCode.NotFound, (int)Documents.SubStatusCodes.ReadSessionNotAvailable)]
+        [DataTestMethod]
+        public async Task ThrowOnReadSessionNotAvailable(HttpStatusCode statusCode, int subStatusCode)
+        {
+            CancellationTokenSource cancellationTokenSource = new CancellationTokenSource(1000);
+
+            Mock<ChangeFeedObserver> mockObserver = new Mock<ChangeFeedObserver>();
+
+            Mock<PartitionCheckpointer> mockCheckpointer = new Mock<PartitionCheckpointer>();
+            Mock<FeedIterator> mockIterator = new Mock<FeedIterator>();
+            mockIterator.Setup(i => i.ReadNextAsync(It.IsAny<CancellationToken>()))
+                .ReturnsAsync(GetResponse(statusCode, false, subStatusCode));
+
+            FeedProcessorCore processor = new FeedProcessorCore(
+                mockObserver.Object,
+                mockIterator.Object,
+                FeedProcessorCoreTests.DefaultSettings,
+                mockCheckpointer.Object);
+
+            await Assert.ThrowsExceptionAsync<FeedReadSessionNotAvailableException>(() => processor.RunAsync(cancellationTokenSource.Token));
+        }
+
         private static ResponseMessage GetResponse(HttpStatusCode statusCode, bool includeItem, int subStatusCode = 0)
         {
             ResponseMessage message = new ResponseMessage(statusCode);
