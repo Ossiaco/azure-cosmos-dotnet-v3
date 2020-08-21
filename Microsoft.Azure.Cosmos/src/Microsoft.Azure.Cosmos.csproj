@@ -85,15 +85,15 @@
     <PackageReference Include="Antlr4.Runtime.Standard" Version="4.8.0" />
     <PackageReference Include="System.Numerics.Vectors" Version="4.5.0" />
     <PackageReference Include="Newtonsoft.Json" Version="10.0.2" />
-    <PackageReference Include="System.Text.Json" Version="4.6.0" />
-    <PackageReference Include="StyleCop.Analyzers" Version="1.1.118" PrivateAssets="All" />
-    <PackageReference Include="Microsoft.VisualStudio.Threading.Analyzers" Version="16.0.102" PrivateAssets="All" />
+    <PackageReference Include="System.Text.Json" Version="4.7.2" />
+    <PackageReference Include="StyleCop.Analyzers" Version="1.2.0-beta.164" PrivateAssets="All" />
+    <PackageReference Include="Microsoft.VisualStudio.Threading.Analyzers" Version="16.7.54" PrivateAssets="All" />
 
     <!--Direct Dependencies-->
     <PackageReference Include="System.Configuration.ConfigurationManager" Version="4.5.0" />
 
     <!--HybridRow Dependencies-->
-    <PackageReference Include="System.Memory" Version="4.5.3" />
+    <PackageReference Include="System.Memory" Version="4.5.4" />
     <PackageReference Include="System.Runtime.CompilerServices.Unsafe" Version="4.6.0" />
     <PackageReference Include="System.Threading.Tasks.Extensions" Version="4.5.2" />
     <PackageReference Include="System.ValueTuple" Version="4.5.0" />
