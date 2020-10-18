@@ -320,6 +320,7 @@ namespace Microsoft.Azure.Cosmos.ChangeFeed.Tests
 
         public class MyDocument
         {
+            [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE1006:Naming Styles", Justification = "match the serialized declatration")]
             public string id { get; set; }
         }
     }
