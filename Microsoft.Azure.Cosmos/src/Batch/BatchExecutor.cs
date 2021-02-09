@@ -59,7 +59,7 @@ namespace Microsoft.Azure.Cosmos
                     executeNextBatchTrace,
                     cancellationToken);
 
-                return await this.ExecuteServerRequestAsync( 
+                return await this.ExecuteServerRequestAsync(
                     serverRequest,
                     executeNextBatchTrace,
                     cancellationToken);

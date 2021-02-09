@@ -405,7 +405,7 @@ namespace Microsoft.Azure.Cosmos
             bool forceRefresh = false)
         {
             PartitionKeyRangeCache partitionKeyRangeCache = await this.GetRoutingMapProviderAsync();
-            return await partitionKeyRangeCache.TryGetOverlappingRangesAsync( 
+            return await partitionKeyRangeCache.TryGetOverlappingRangesAsync(
                 collectionResourceId, 
                 range,
                 NoOpTrace.Singleton,
