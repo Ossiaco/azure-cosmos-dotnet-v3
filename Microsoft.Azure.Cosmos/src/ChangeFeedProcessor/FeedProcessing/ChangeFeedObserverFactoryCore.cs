@@ -7,6 +7,7 @@ namespace Microsoft.Azure.Cosmos.ChangeFeed.FeedProcessing
     using System;
     using System.Collections.Generic;
     using System.IO;
+    using System.Linq;
     using System.Threading;
     using System.Threading.Tasks;
     using Microsoft.Azure.Cosmos.ChangeFeed.Exceptions;
@@ -50,15 +51,18 @@ namespace Microsoft.Azure.Cosmos.ChangeFeed.FeedProcessing
             {
                 asFeedResponse = CosmosFeedResponseSerializer.FromFeedResponseStream<T>(
                                     this.serializerCore,
-                                    changes); 
+                                    changes);
+
+                if (asFeedResponse.Any())
+                {
+                    await this.onChanges(asFeedResponse, cancellationToken).ConfigureAwait(false);
+                }
             }
             catch (Exception serializationException)
             {
                 // Error using custom serializer to parse stream
                 throw new ObserverException(serializationException);
             }
-
-            await this.onChanges(asFeedResponse, cancellationToken);
         }
     }
 }
